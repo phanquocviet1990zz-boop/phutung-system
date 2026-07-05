@@ -11,11 +11,15 @@ const PORT = process.env.PORT || 3000;
 let productCodes = [];
 
 async function loadProductCodes() {
-    const folders = await getProductCodes();
-    productCodes = folders.map(f => f.name);
-    console.log("Đã nạp", productCodes.length, "mã hàng từ Google Drive");
+    try {
+        const folders = await getProductCodes();
+        productCodes = folders.map(f => f.name);
+        console.log("Loaded:", productCodes.length);
+    } catch (err) {
+        console.log("Drive error:", err.message);
+        productCodes = [];
+    }
 }
-
 loadProductCodes();
 
 app.use(cors());
@@ -81,17 +85,7 @@ app.get("/api/suggest", (req, res) => {
 
 
 
-app.get("/api/suggest",(req,res)=>{
 
-const keyword=(req.query.keyword||"").toLowerCase();
-
-const result=productCodes.filter(code=>
-code.toLowerCase().includes(keyword)
-);
-
-res.json(result.slice(0,20));
-
-});
 
 
 app.listen(PORT, () => {

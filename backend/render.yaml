@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: phutung2-system
+    env: node
+    buildCommand: npm install
+    startCommand: node backend/server.js
